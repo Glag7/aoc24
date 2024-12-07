@@ -1,7 +1,5 @@
 #stupid ass brutefoce
-def check_cycle(s, i, j):
-    idir = -1
-    jdir = 0
+def check_cycle(s, i, j, idir, jdir):
     pos_list = []
     while (s[i + idir][j + jdir] != "`" and (i, j, idir, jdir) not in pos_list):
         while (s[i + idir][j + jdir] in "H#"):
@@ -47,7 +45,7 @@ while (s[i + idir][j + jdir] != "`"):
                 stupid_list = list(s[i])
                 stupid_list[j] = "H"
                 s[i] = "".join(stupid_list) 
-                if check_cycle(s, ogi, ogj):
+                if check_cycle(s, i- idir, j - jdir, idir, jdir):
                     total += 1
         stupid_list = list(s[i])
         stupid_list[j] = "x"
