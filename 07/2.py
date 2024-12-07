@@ -1,17 +1,29 @@
 file =  open("input", "r")
 
-s = ["a" * 1000]
+eq = []
 for line in file:
-    s.append("a" + line + "a")
-s.append("a" * 1000)
+    nums = line.rstrip().split(" ")
+    nums[0] = int(nums[0][:-1:])
+    for i in range(1, len(nums)):
+        nums[i] = int(nums[i])
+    eq.append(nums)
+
+def search(wanted, nums):
+    if (len(nums) == 1):
+        return nums[0] == wanted
+    try:
+        if (str(wanted).endswith(str(nums[-1])) and search(int(str(wanted)[:-len(str(nums[-1])):]), nums[:-1:])):
+            return 1
+    except ValueError:
+        pass
+    mul = wanted // nums[-1]
+    if (wanted % nums[-1] == 0 and search(mul, nums[:-1:])):
+        return 1
+    return search(wanted - nums[-1], nums[:-1:])
 
 total = 0
-for i in range(1, len(s[1]) - 1):
-    for j in range(1, len(s) - 1):
-        if s[i][j] == 'A':
-            total += ((s[i + 1][j + 1] == "S" and s[i - 1][j - 1] == "M") or (s[i + 1][j + 1] == "M" and s[i - 1][j - 1] == "S")) \
-                    and ((s[i - 1][j + 1] == "S" and s[i + 1][j - 1] == "M") or (s[i - 1][j + 1] == "M" and s[i + 1][j - 1] == "S"))
-
+for nums in eq:
+    total += search(nums[0], nums[1::]) * nums[0]
 print("total is", total)
 
 file.close()
