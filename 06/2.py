@@ -1,3 +1,19 @@
+#stupid ass brutefoce
+def check_cycle(s, i, j):
+    idir = -1
+    jdir = 0
+    pos_list = []
+    while (s[i + idir][j + jdir] != "`" and (i, j, idir, jdir) not in pos_list):
+        while (s[i + idir][j + jdir] in "H#"):
+            new_idir = (jdir == 1) - (jdir == -1)
+            jdir = (idir == -1) - (idir == 1)
+            idir = new_idir
+        while (s[i + idir][j + jdir] in ".x" and (i, j, idir, jdir) not in pos_list):
+            pos_list.append((i, j, idir, jdir))
+            i += idir
+            j += jdir
+    return (i, j, idir, jdir) in pos_list
+
 file =  open("input", "r")
 
 i = 0
@@ -10,50 +26,32 @@ for line in file:
         j = line.find("^") + 1
         if (j):
             search = 0
-    s.append("a" + line.rstrip().replace("^", "X") + "a")
-s = ["a" * len(s[0])] + s + ["a" * len(s[0])]
+    s.append("`" + line.rstrip().replace("^", "x") + "`")
+s = ["`" * len(s[0])] + s + ["`" * len(s[0])]
 
 total = 0
-istart = i
-jstart = j
 idir = -1
 jdir = 0
-
-while (s[i + idir][j + jdir] != "a"):
-    new_idir = (jdir == 1) - (jdir == -1)
-    new_jdir = (idir == -1) - (idir == 1)
-
-    if (s[i + idir][j + jdir] == "#"):
+ogi = i
+ogj = j
+while (s[i + idir][j + jdir] != "`"):
+    while (s[i + idir][j + jdir] == "#"):
+        new_idir = (jdir == 1) - (jdir == -1)
+        jdir = (idir == -1) - (idir == 1)
         idir = new_idir
-        jdir = new_jdir
-    elif (s[i + idir][j + jdir] == "." or s[i + idir][j + jdir] == "X"):
-        if (s[i + idir][j + jdir] == "."):
-            idir2 = new_idir
-            jdir2 = new_jdir
-            i2 = i + idir2
-            j2 = j + jdir2
-            epic_pos_list = [(i,j, idir, jdir)]
-            while (s[i2 + idir2][j2 + jdir2] != "a" and (i2, j2, idir2, jdir2) not in epic_pos_list):
-                while (s[i2 + idir2][j2 + jdir2] == "#"):
-                    new_idir2 = (jdir2 == 1) - (jdir2 == -1)
-                    jdir2 = (idir2 == -1) - (idir2 == 1)
-                    idir2 = new_idir2
-                while (s[i2 + idir2][j2 + jdir2] in ".X" and (i2, j2, idir2, jdir2) not in epic_pos_list):
-                    epic_pos_list.append((i2, j2, idir2, jdir2))
-                    i2 += idir2
-                    j2 += jdir2
-            #if not (i2, j2, idir2, jdir2) in epic_pos_list:
-               # for line in s:
-                #    print(line)
-                #print(epic_pos_list, i2, j2)
-            total += (i2, j2, idir2, jdir2) in epic_pos_list
-
+    while (s[i + idir][j + jdir] in ".x"):
         i += idir
         j += jdir
+        if s[i][j] != "x":
+            if (i != ogi or j != ogj):
+                stupid_list = list(s[i])
+                stupid_list[j] = "H"
+                s[i] = "".join(stupid_list) 
+                if check_cycle(s, ogi, ogj):
+                    total += 1
         stupid_list = list(s[i])
-        stupid_list[j] = "X"
+        stupid_list[j] = "x"
         s[i] = "".join(stupid_list)
-
 
 print("total is", total)
 
