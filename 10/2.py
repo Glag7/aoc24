@@ -10,8 +10,6 @@ for line in file:
 nums = [[-3] * len(nums[0])] + nums + [[-3] * len(nums[0])]
 pos_list = [[[] for _ in range(len(nums[0]))] for _ in range(len(nums))]
 
-for line in pos_list:
-    print(line)
 total = 0
 for n in range(9, -1, -1):
     for i in range(1, len(nums) - 1):
@@ -30,9 +28,6 @@ for n in range(9, -1, -1):
                         pos_list[i][j] += pos_list[i][j - 1]
                 if (n == 0):
                     total += len(pos_list[i][j])
-
-for line in pos_list:
-    print(line)
 
 print("total is", total)
 
